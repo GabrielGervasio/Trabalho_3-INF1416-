@@ -95,7 +95,7 @@ public class EnvelopeDigital {
      */
     public static void assinarEsalvar(byte[] dados, PrivateKey chavePrivada,
                                       String caminhoAsd) throws Exception {
-        Signature sig = Signature.getInstance("SHA256withRSA");
+        Signature sig = Signature.getInstance("SHA1withRSA");
         sig.initSign(chavePrivada);
         sig.update(dados);
         byte[] assinatura = sig.sign();
@@ -112,7 +112,7 @@ public class EnvelopeDigital {
      */
     public static boolean verificarAssinatura(byte[] dados, byte[] assinatura,
                                               PublicKey chavePublica) throws Exception {
-        Signature sig = Signature.getInstance("SHA256withRSA");
+        Signature sig = Signature.getInstance("SHA1withRSA");
         sig.initVerify(chavePublica);
         sig.update(dados);
         return sig.verify(assinatura);
