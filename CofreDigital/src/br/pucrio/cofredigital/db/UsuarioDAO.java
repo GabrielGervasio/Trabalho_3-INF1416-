@@ -182,4 +182,27 @@ public class UsuarioDAO {
         usuario.setTotalAcessos(rs.getInt("total_acessos"));
         return usuario;
     }
+
+    public Usuario findAdmin() throws SQLException {
+        String sql = "SELECT * FROM Usuarios WHERE GID = 1 LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return extractUsuarioFromResultSet(rs);
+            return null;
+        }
+    }
+
+    public boolean estaBloqueado(int uid) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Usuarios WHERE UID = ? " +
+                    "AND bloqueado_ate IS NOT NULL " +
+                    "AND datetime(bloqueado_ate) > datetime('now')";
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, uid);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    }
+    
 }

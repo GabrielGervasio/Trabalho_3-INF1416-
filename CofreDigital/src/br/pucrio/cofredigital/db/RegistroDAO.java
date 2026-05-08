@@ -171,4 +171,18 @@ public class RegistroDAO {
         registro.setArqName(rs.getString("arq_name"));
         return registro;
     }
+
+    public static void registrar(int mid, Integer uid, String arqName) {
+        String sql = "INSERT INTO Registros (MID, UID, arq_name) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, mid);
+            if (uid != null) pstmt.setInt(2, uid); 
+            else pstmt.setNull(2, java.sql.Types.INTEGER);
+            pstmt.setString(3, arqName);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erro ao registrar MID=" + mid + ": " + e.getMessage());
+        }
+    }
 }

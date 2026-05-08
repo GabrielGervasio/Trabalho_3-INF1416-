@@ -118,6 +118,28 @@ public class CryptoUtils {
         return kf.generatePrivate(spec);
     }
 
+    /**
+     * Lê e decripta a chave privada a partir de bytes já carregados (do banco).
+     * Usado quando a chave vem do banco em vez de um arquivo no disco.
+     */
+    public static PrivateKey lerChavePrivadaDosBytes(byte[] bytesChaveCifrada,
+                                                      String fraseSecreta) throws Exception {
+        SecretKey chaveAES = gerarChaveAES(fraseSecreta);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, chaveAES);
+        byte[] pemBytes = cipher.doFinal(bytesChaveCifrada);
+
+        String pem = new String(pemBytes, "UTF-8");
+        String base64 = pem
+            .replace("-----BEGIN PRIVATE KEY-----", "")
+            .replace("-----END PRIVATE KEY-----", "")
+            .replaceAll("\\s+", "");
+
+        byte[] pkcs8Bytes = Base64.getDecoder().decode(base64);
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(pkcs8Bytes);
+        return KeyFactory.getInstance("RSA").generatePrivate(spec);
+    }
+
     // -------------------------------------------------------------------------
     // LEITURA DO CERTIFICADO DIGITAL
     // -------------------------------------------------------------------------
