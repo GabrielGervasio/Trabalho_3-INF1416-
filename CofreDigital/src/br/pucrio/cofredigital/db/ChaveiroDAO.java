@@ -98,6 +98,8 @@ public class ChaveiroDAO {
             pstmt.executeUpdate();
         }
     }
+
+    
     
     // DELETE - Remover por KID
     public void delete(int kid) throws SQLException {
@@ -117,6 +119,16 @@ public class ChaveiroDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, uid);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void updateUid(int kid, int uid) throws SQLException {
+        String sql = "UPDATE Chaveiro SET UID = ? WHERE KID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, uid);
+            pstmt.setInt(2, kid);
             pstmt.executeUpdate();
         }
     }
