@@ -3,6 +3,8 @@ package br.pucrio.cofredigital.ui;
 import br.pucrio.cofredigital.auth.AuthController;
 import br.pucrio.cofredigital.model.Usuario;
 import br.pucrio.cofredigital.db.RegistroDAO;
+import br.pucrio.cofredigital.ui.TelaCadastro;
+import br.pucrio.cofredigital.ui.TelaConsulta;
 
 import javax.swing.*;
 import java.awt.*;
@@ -85,9 +87,8 @@ public class TelaPrincipal extends JFrame {
             JButton btn1 = TelasAutenticacao.criarBotao("[ 1 ] Cadastrar novo usuário");
             btn1.addActionListener(e -> {
                 RegistroDAO.registrar(5002, usuario.getUid(), null);
-                JOptionPane.showMessageDialog(this,
-                    "Tela de Cadastro — em implementação.",
-                    "Cadastro", JOptionPane.INFORMATION_MESSAGE);
+                new TelaCadastro(auth, usuario, false).setVisible(true);
+                dispose();
             });
             corpo2.add(btn1, gbc);
         }
@@ -96,9 +97,8 @@ public class TelaPrincipal extends JFrame {
         JButton btn2 = TelasAutenticacao.criarBotao("[ 2 ] Consultar pasta de arquivos");
         btn2.addActionListener(e -> {
             RegistroDAO.registrar(5003, usuario.getUid(), null);
-            JOptionPane.showMessageDialog(this,
-                "Tela de Consulta — em implementação.",
-                "Consulta", JOptionPane.INFORMATION_MESSAGE);
+            new TelaConsulta(auth, usuario).setVisible(true);
+            dispose();
         });
         corpo2.add(btn2, gbc);
 
