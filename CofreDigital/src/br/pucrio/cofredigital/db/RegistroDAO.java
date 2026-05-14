@@ -2,25 +2,32 @@ package br.pucrio.cofredigital.db;
 
 import br.pucrio.cofredigital.model.Registro;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class RegistroDAO {
     
     // CREATE - Inserir registro
-    public int insert(Registro registro) throws SQLException {
-        String sql = "INSERT INTO Registros (MID, UID, arq_name) VALUES (?, ?, ?)";
+    private int insert(Registro registro) throws SQLException {
+        String sql = "INSERT INTO Registros (data_hora, MID, UID, arq_name) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
-            pstmt.setInt(1, registro.getMid());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataHora = sdf.format(new Date());
+            pstmt.setString(1, dataHora);
+            pstmt.setInt(2, registro.getMid());
+            
             if (registro.getUid() != null) {
-                pstmt.setInt(2, registro.getUid());
+                pstmt.setInt(3, registro.getUid());
             } else {
-                pstmt.setNull(2, Types.INTEGER);
+                pstmt.setNull(3, Types.INTEGER);
             }
-            pstmt.setString(3, registro.getArqName());
+            
+            pstmt.setString(4, registro.getArqName());
             
             int affectedRows = pstmt.executeUpdate();
             
@@ -173,14 +180,24 @@ public class RegistroDAO {
     }
 
     public static void registrar(int mid, Integer uid, String arqName) {
-        String sql = "INSERT INTO Registros (MID, UID, arq_name) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Registros (data_hora, MID, UID, arq_name) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, mid);
-            if (uid != null) pstmt.setInt(2, uid); 
-            else pstmt.setNull(2, java.sql.Types.INTEGER);
-            pstmt.setString(3, arqName);
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataHora = sdf.format(new Date());
+            pstmt.setString(1, dataHora);
+            pstmt.setInt(2, mid);
+            
+            if (uid != null) {
+                pstmt.setInt(3, uid); 
+            } else {
+                pstmt.setNull(3, java.sql.Types.INTEGER);
+            }
+            
+            pstmt.setString(4, arqName);
             pstmt.executeUpdate();
+            
         } catch (SQLException e) {
             System.err.println("Erro ao registrar MID=" + mid + ": " + e.getMessage());
         }

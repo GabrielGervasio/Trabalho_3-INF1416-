@@ -38,8 +38,7 @@ import java.util.Base64;
 public class Main {
 
     // ── Ajuste este caminho para onde está o banco do CofreDigital ───────────
-    private static final String DB_PATH =
-        "C:/Users/Gabriel/Documents/vscode/Trab3/CofreDigital/meubanco.db";
+    private static final String DB_PATH = "../CofreDigital/meubanco.db";
 
     public static void main(String[] args) {
         // ── 1. Verificar argumento da linha de comando ────────────────────────
