@@ -2,6 +2,7 @@ package br.pucrio.cofredigital.db;
 
 import br.pucrio.cofredigital.model.Usuario;
 import java.sql.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,11 +125,13 @@ public class UsuarioDAO {
     
     // UPDATE - Bloquear usuário por X minutos
     public void bloquearUsuario(int uid, int minutos) throws SQLException {
-        String sql = "UPDATE Usuarios SET bloqueado_ate = datetime('now', '+' || ? || ' minutes') WHERE UID = ?";
-        
+        String sql = "UPDATE Usuarios SET bloqueado_ate = ? WHERE UID = ?";
+
+        Timestamp bloqueadoAte = new Timestamp(System.currentTimeMillis() + (long) minutos * 60L * 1000L);
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, minutos);
+            pstmt.setTimestamp(1, bloqueadoAte);
             pstmt.setInt(2, uid);
             pstmt.executeUpdate();
         }
