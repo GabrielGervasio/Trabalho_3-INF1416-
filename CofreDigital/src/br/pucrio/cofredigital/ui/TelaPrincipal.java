@@ -1,3 +1,6 @@
+// Benito Andre Pepe - 2311720
+// Gabriel Gervasio de santana - 2312672
+
 package br.pucrio.cofredigital.ui;
 
 import br.pucrio.cofredigital.auth.AuthController;

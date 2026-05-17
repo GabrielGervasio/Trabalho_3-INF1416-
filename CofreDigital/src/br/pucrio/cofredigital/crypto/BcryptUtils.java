@@ -1,3 +1,6 @@
+// Benito Andre Pepe - 2311720
+// Gabriel Gervasio de santana - 2312672
+
 package br.pucrio.cofredigital.crypto;
 
 import org.bouncycastle.crypto.generators.OpenBSDBCrypt;
